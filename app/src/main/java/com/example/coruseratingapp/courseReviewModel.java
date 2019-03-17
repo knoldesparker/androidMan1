@@ -1,23 +1,41 @@
 package com.example.coruseratingapp;
 
 public class courseReviewModel {
-    //TODO: create a starscore for each star
-    float starScore;
+    float starScoreQ1, starScoreQ2, starScoreQ3;
     String finalNote;
+
     public courseReviewModel() {
     }
 
-    public courseReviewModel(float starScore, String finalNote) {
-        this.starScore = starScore;
+    public courseReviewModel(float starScoreQ1, float starScoreQ2, float starScoreQ3, String finalNote) {
+        this.starScoreQ1 = starScoreQ1;
+        this.starScoreQ2 = starScoreQ2;
+        this.starScoreQ3 = starScoreQ3;
         this.finalNote = finalNote;
     }
 
-    public float getStarScore() {
-        return starScore;
+    public float getStarScoreQ1() {
+        return starScoreQ1;
     }
 
-    public void setStarScore(float starScore) {
-        this.starScore = starScore;
+    public void setStarScoreQ1(float starScoreQ1) {
+        this.starScoreQ1 = starScoreQ1;
+    }
+
+    public float getStarScoreQ2() {
+        return starScoreQ2;
+    }
+
+    public void setStarScoreQ2(float starScoreQ2) {
+        this.starScoreQ2 = starScoreQ2;
+    }
+
+    public float getStarScoreQ3() {
+        return starScoreQ3;
+    }
+
+    public void setStarScoreQ3(float starScoreQ3) {
+        this.starScoreQ3 = starScoreQ3;
     }
 
     public String getFinalNote() {

@@ -1,5 +1,6 @@
 package com.example.coruseratingapp;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,15 +12,25 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class CourseRatingActivity extends AppCompatActivity {
     private TextView textViewQ1;
+    private TextView textViewQ2;
+    private TextView textViewQ3;
     private TextView Title;
     private EditText editTextfinalNote;
-    private RatingBar ratingBarQ1, ratingBarQ2, getRatingBarQ3;
+    private RatingBar ratingBarQ1, ratingBarQ2, ratingBarQ3;
     DocumentSnapshot documentSnapshot;
     private String test;
     private String idForCourse;
@@ -35,12 +46,49 @@ public class CourseRatingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_course_rating);
         Title = findViewById(R.id.courseName);
         textViewQ1 = findViewById(R.id.tvQ1);
+        textViewQ2 = findViewById(R.id.tvQ2);
+        textViewQ3 = findViewById(R.id.tvQ3);
         ratingBarQ1 = findViewById(R.id.ratingQ1);
         ratingBarQ2 = findViewById(R.id.ratingQ2);
-        getRatingBarQ3 = findViewById(R.id.ratingQ3);
+        ratingBarQ3 = findViewById(R.id.ratingQ3);
         editTextfinalNote = findViewById(R.id.etfinalNote);
         getIncomingIntent();
         setValuesOnScreen();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference courseQuestionsRef = db.collection("courseQuestions");
+        courseQuestionsRef.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot queryDocumentSnapshots, FirebaseFirestoreException e) {
+                if (e != null) {
+                    return;
+                }
+
+                String quest1 = "";
+                String quest2 = "";
+                String quest3 = "";
+                String documentId = "";
+
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    courseQuestionModel courseQ = documentSnapshot.toObject(courseQuestionModel.class);
+                    courseQ.setDocumentID(documentSnapshot.getId());
+
+                    documentId = courseQ.getDocumentID();
+                    quest1= courseQ.getQuestion1();
+                    quest2= courseQ.getQuestion2();
+                    quest3= courseQ.getQuestion3();
+                    Log.d(TAG, "onEvent: Getting data" + documentId + quest1 + " " + quest2 + " " + quest3);
+                }
+                Log.d(TAG, "onEvent: " + documentId);
+                textViewQ1.setText(quest1);
+                textViewQ2.setText(quest2);
+                textViewQ3.setText(quest3);
+            }
+        });
     }
 
 
@@ -65,10 +113,8 @@ public class CourseRatingActivity extends AppCompatActivity {
 
     private void setValuesOnScreen(){
         Log.d(TAG, "setValuesOnScreen: setting values on screen");
-        CollectionReference courseRef = FirebaseFirestore.getInstance()
-                .collection("courseQuestions");
-
-
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference courseQuestionsRef = db.collection("courseQuestions");
 
         Title.setText(nameForCourse);
     }
@@ -96,7 +142,9 @@ public class CourseRatingActivity extends AppCompatActivity {
     private void saveRating(){
 
         String a1String = editTextfinalNote.getText().toString();
-        float rating = ratingBarQ1.getRating();
+        float ratingBarQ1Rating = ratingBarQ1.getRating();
+        float ratingBarQ2Rating = ratingBarQ2.getRating();
+        float ratingBarQ3Rating = ratingBarQ3.getRating();
 
 
 
@@ -107,7 +155,7 @@ public class CourseRatingActivity extends AppCompatActivity {
 
         CollectionReference courseRef = FirebaseFirestore.getInstance()
                 .collection(pathForCourse+ "/courseReview");
-            courseRef.add(new courseReviewModel(rating,a1String));
+            courseRef.add(new courseReviewModel(ratingBarQ1Rating,ratingBarQ2Rating,ratingBarQ3Rating,a1String));
         Toast.makeText(this, "Review added", Toast.LENGTH_SHORT).show();
 
         finish();

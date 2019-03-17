@@ -19,8 +19,8 @@
         android:id="@+id/dividerTop"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
         android:background="?android:attr/listDivider" />
 
     <TextView
