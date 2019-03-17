@@ -1,0 +1,130 @@
+{
+  "project_info": {
+    "project_number": "743137083758",
+    "firebase_url": "https://courserating-a3fa7.firebaseio.com",
+    "project_id": "courserating-a3fa7",
+    "storage_bucket": "courserating-a3fa7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743137083758:android:9f05ecff5af64572",
+        "android_client_info": {
+          "package_name": "com.example.basicfirebaseapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743137083758-jibjm0qneblr024io0gmj3rs2gftn5f6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.basicfirebaseapp",
+            "certificate_hash": "08694962e159c31186ed70b64b419aa7f900eeb8"
+          }
+        },
+        {
+          "client_id": "743137083758-u3kvc9hptfv3mglm52310s0g9fea36no.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiXEuzjFxYW6DvtmDUP8VasA7OxD_6DeE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "743137083758-u3kvc9hptfv3mglm52310s0g9fea36no.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743137083758:android:595875aa45d7be6f",
+        "android_client_info": {
+          "package_name": "com.example.coruseratingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743137083758-b27b6d9p5fc2rgiep4vvo01f86u5r71a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.coruseratingapp",
+            "certificate_hash": "08694962e159c31186ed70b64b419aa7f900eeb8"
+          }
+        },
+        {
+          "client_id": "743137083758-u3kvc9hptfv3mglm52310s0g9fea36no.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiXEuzjFxYW6DvtmDUP8VasA7OxD_6DeE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "743137083758-u3kvc9hptfv3mglm52310s0g9fea36no.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743137083758:android:e7250de567cf5db1",
+        "android_client_info": {
+          "package_name": "com.example.courseratingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743137083758-u3kvc9hptfv3mglm52310s0g9fea36no.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiXEuzjFxYW6DvtmDUP8VasA7OxD_6DeE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

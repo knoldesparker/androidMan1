@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".CourseRatingActivity">
+
+    <TextView
+        android:id="@+id/courseName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/courseName"
+        android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large"
+        />
+    <View
+        android:id="@+id/dividerTop"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="4dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/tvQ1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Placeholder for question 1"
+        android:textAppearance="@android:style/TextAppearance.Medium"/>
+
+
+    <RatingBar
+        android:id="@+id/ratingQ1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        />
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/tvQ2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Placeholder for question 2"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@android:style/TextAppearance.Medium"/>
+
+    <RatingBar
+        android:id="@+id/ratingQ2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/tvQ3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Placeholder for question 3"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@android:style/TextAppearance.Medium"/>
+
+    <RatingBar
+        android:id="@+id/ratingQ3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        />
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:background="?android:attr/listDivider" />
+
+    <TextView
+        android:id="@+id/tvComments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/final_comments_on_course"
+        android:layout_marginTop="8dp"
+        android:textAppearance="@android:style/TextAppearance.Medium"/>
+   <EditText
+       android:id="@+id/etfinalNote"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:hint="@string/finalComments"
+       android:inputType="textImeMultiLine"
+       />
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="4dp"
+        android:background="?android:attr/listDivider" />
+
+
+</LinearLayout>
