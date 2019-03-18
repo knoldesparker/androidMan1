@@ -1,5 +1,6 @@
 package com.example.coruseratingapp;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -39,6 +42,11 @@ public class CourseRatingActivity extends AppCompatActivity {
 
     private static final String TAG = "CourseRatingActivity";
 
+    //Firebase Auth
+    private FirebaseAuth mAuth;
+    //Firebase
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +62,7 @@ public class CourseRatingActivity extends AppCompatActivity {
         editTextfinalNote = findViewById(R.id.etfinalNote);
         getIncomingIntent();
         setValuesOnScreen();
+        setupFirebaseAuth();
     }
 
     @Override
@@ -87,6 +96,10 @@ public class CourseRatingActivity extends AppCompatActivity {
                 textViewQ1.setText(quest1);
                 textViewQ2.setText(quest2);
                 textViewQ3.setText(quest3);
+
+                FirebaseAuth.getInstance().addAuthStateListener(mAuthListener);
+                Log.d(TAG, "onEvent: ");
+
             }
         });
     }
@@ -145,6 +158,7 @@ public class CourseRatingActivity extends AppCompatActivity {
         float ratingBarQ1Rating = ratingBarQ1.getRating();
         float ratingBarQ2Rating = ratingBarQ2.getRating();
         float ratingBarQ3Rating = ratingBarQ3.getRating();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
 
@@ -153,12 +167,29 @@ public class CourseRatingActivity extends AppCompatActivity {
             return;
         }
 
-        CollectionReference courseRef = FirebaseFirestore.getInstance()
-                .collection(pathForCourse+ "/courseReview");
-            courseRef.add(new courseReviewModel(ratingBarQ1Rating,ratingBarQ2Rating,ratingBarQ3Rating,a1String));
+        DocumentReference courseRef = FirebaseFirestore.getInstance()
+                .collection(pathForCourse+ "/courseReview").document(userId);
+            courseRef.set(new courseReviewModel(ratingBarQ1Rating,ratingBarQ2Rating,ratingBarQ3Rating,a1String));
         Toast.makeText(this, "Review added", Toast.LENGTH_SHORT).show();
 
         finish();
+    }
+
+
+    private void setupFirebaseAuth(){
+        Log.d(TAG, "setupFirebaseAuth: started.");
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+                }
+            }
+        };
     }
 
 }

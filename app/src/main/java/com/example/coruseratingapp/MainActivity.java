@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,7 +31,10 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity  {
 
-
+    //Firebase Auth
+    private FirebaseAuth mAuth;
+    //Firebase
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     private static String TAG ="MainActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -47,21 +54,13 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpRecyclerView();
-
-
-        //RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        //recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-       // DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-       // Query query = rootRef.child("Users");
-
-
+        setupFirebaseAuth();
     }
 
     private void setUpRecyclerView() {
 
 
-        Query query = courseListRef.orderBy("courseName", Query.Direction.DESCENDING);
+        Query query = courseListRef.orderBy("courseName", Query.Direction.ASCENDING);
         final FirestoreRecyclerOptions<Courses> options = new FirestoreRecyclerOptions.Builder<Courses>()
                 .setQuery(query, Courses.class)
                 .build();
@@ -108,21 +107,51 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.options_menu, menu);
 
-/* Old Ways
-    private void getCourseList(){
-        Query query2 = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("courses");
+        return true;
+    }
 
-        FirebaseRecyclerOptions<Courses> options =
-                new FirebaseRecyclerOptions.Builder<Courses>()
-                        .setQuery(query2, Courses.class)
-                        .build();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.optionSignOut:
+                signOut();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-*/
+    }
 
+    private void signOut(){
+        Log.d(TAG, "signOut: signing out");
+        FirebaseAuth.getInstance().signOut();
+    }
 
+    private void setupFirebaseAuth(){
+        Log.d(TAG, "setupFirebaseAuth: started.");
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        };
+    }
 
 
     @Override
@@ -130,6 +159,8 @@ public class MainActivity extends AppCompatActivity  {
         super.onStart();
         Log.d(TAG, "onStart: Called ");
         adapter.startListening();
+        FirebaseAuth.getInstance().addAuthStateListener(mAuthListener);
+
     }
 
     @Override
@@ -137,11 +168,9 @@ public class MainActivity extends AppCompatActivity  {
         super.onStop();
         Log.d(TAG, "onStop: Called");
         adapter.stopListening();
-
-        /*if (firebaseRecyclerAdapter!= null) {
-            firebaseRecyclerAdapter.stopListening();
+        if (mAuthListener != null) {
+            FirebaseAuth.getInstance().removeAuthStateListener(mAuthListener);
         }
-        */
     }
 
 }
