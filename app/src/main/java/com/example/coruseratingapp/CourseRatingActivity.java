@@ -27,6 +27,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.DecimalFormat;
+
 public class CourseRatingActivity extends AppCompatActivity {
     private TextView textViewQ1;
     private TextView textViewQ2;
@@ -39,6 +41,7 @@ public class CourseRatingActivity extends AppCompatActivity {
     private String idForCourse;
     private String pathForCourse;
     private String nameForCourse;
+    DecimalFormat df = new DecimalFormat("#.##");
 
     private static final String TAG = "CourseRatingActivity";
 
@@ -152,12 +155,16 @@ public class CourseRatingActivity extends AppCompatActivity {
         }
     }
 
+
+
     private void saveRating(){
 
         String a1String = editTextfinalNote.getText().toString();
         float ratingBarQ1Rating = ratingBarQ1.getRating();
         float ratingBarQ2Rating = ratingBarQ2.getRating();
         float ratingBarQ3Rating = ratingBarQ3.getRating();
+        float avageScore;
+
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
@@ -166,10 +173,13 @@ public class CourseRatingActivity extends AppCompatActivity {
             Toast.makeText(this, "Please write a message", Toast.LENGTH_SHORT).show();
             return;
         }
+        avageScore = (ratingBarQ1Rating+ratingBarQ2Rating+ratingBarQ3Rating)/3;
 
+
+        Log.d(TAG, "saveRating: avageScore: " + avageScore);
         DocumentReference courseRef = FirebaseFirestore.getInstance()
                 .collection(pathForCourse+ "/courseReview").document(userId);
-            courseRef.set(new courseReviewModel(ratingBarQ1Rating,ratingBarQ2Rating,ratingBarQ3Rating,a1String));
+            courseRef.set(new courseReviewModel(ratingBarQ1Rating,ratingBarQ2Rating,ratingBarQ3Rating,a1String, avageScore));
         Toast.makeText(this, "Review added", Toast.LENGTH_SHORT).show();
 
         finish();

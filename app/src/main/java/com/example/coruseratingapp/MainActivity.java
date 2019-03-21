@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void setUpRecyclerView() {
-
-
         Query query = courseListRef.orderBy("courseName", Query.Direction.ASCENDING);
         final FirestoreRecyclerOptions<Courses> options = new FirestoreRecyclerOptions.Builder<Courses>()
                 .setQuery(query, Courses.class)
