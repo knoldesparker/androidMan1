@@ -41,6 +41,7 @@ public class CourseRatingActivity extends AppCompatActivity {
     private String idForCourse;
     private String pathForCourse;
     private String nameForCourse;
+    private String grade;
     DecimalFormat df = new DecimalFormat("#.##");
 
     private static final String TAG = "CourseRatingActivity";
@@ -155,15 +156,48 @@ public class CourseRatingActivity extends AppCompatActivity {
         }
     }
 
+    private void courseRating(){
+
+        float ratingBarQ1Rating = ratingBarQ1.getRating();
+        float ratingBarQ2Rating = ratingBarQ2.getRating();
+        float ratingBarQ3Rating = ratingBarQ3.getRating();
+        float avageScore;
+        int avageIntScore;
+
+        avageScore = (ratingBarQ1Rating+ratingBarQ2Rating+ratingBarQ3Rating)/3;
+        avageIntScore = Math.round(avageScore);
+        Log.d(TAG, "courseRating: GRADE: "+ avageIntScore);
+
+        if (avageIntScore >= 4.5){
+            grade = "A+";
+            Log.d(TAG, "courseRating: avageIntScore >= 4.5 " + grade);
+
+        }
+        else if (avageIntScore < 4.4 && avageIntScore > 4){
+            grade = "A";
+            Log.d(TAG, "courseRating: avageIntScore < 4.4 && avageIntScore > 4 " + grade);
+
+        }
+        else if (avageIntScore < 4 && avageIntScore > 3.5){
+            grade = "B";
+            Log.d(TAG, "courseRating: avageIntScore < 4 && avageIntScore > 3.5 " + grade);
+        }
+        else if (avageIntScore < 3.5 && avageIntScore > 2){
+            grade = "C";
+
+        }
+    }
+
 
 
     private void saveRating(){
+        courseRating();
+
 
         String a1String = editTextfinalNote.getText().toString();
         float ratingBarQ1Rating = ratingBarQ1.getRating();
         float ratingBarQ2Rating = ratingBarQ2.getRating();
         float ratingBarQ3Rating = ratingBarQ3.getRating();
-        float avageScore;
 
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -173,13 +207,12 @@ public class CourseRatingActivity extends AppCompatActivity {
             Toast.makeText(this, "Please write a message", Toast.LENGTH_SHORT).show();
             return;
         }
-        avageScore = (ratingBarQ1Rating+ratingBarQ2Rating+ratingBarQ3Rating)/3;
 
 
-        Log.d(TAG, "saveRating: avageScore: " + avageScore);
+        Log.d(TAG, "saveRating: avageScore: " + grade);
         DocumentReference courseRef = FirebaseFirestore.getInstance()
                 .collection(pathForCourse+ "/courseReview").document(userId);
-            courseRef.set(new courseReviewModel(ratingBarQ1Rating,ratingBarQ2Rating,ratingBarQ3Rating,a1String, avageScore));
+            courseRef.set(new courseReviewModel(ratingBarQ1Rating,ratingBarQ2Rating,ratingBarQ3Rating,a1String, grade));
         Toast.makeText(this, "Review added", Toast.LENGTH_SHORT).show();
 
         finish();

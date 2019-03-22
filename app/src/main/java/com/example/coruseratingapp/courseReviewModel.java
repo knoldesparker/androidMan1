@@ -3,17 +3,17 @@ package com.example.coruseratingapp;
 public class courseReviewModel {
     float starScoreQ1, starScoreQ2, starScoreQ3;
     String finalNote;
-    float avageScore;
+    String grade;
 
     public courseReviewModel() {
     }
 
-    public courseReviewModel(float starScoreQ1, float starScoreQ2, float starScoreQ3, String finalNote, float avageScore) {
+    public courseReviewModel(float starScoreQ1, float starScoreQ2, float starScoreQ3, String finalNote, String grade) {
         this.starScoreQ1 = starScoreQ1;
         this.starScoreQ2 = starScoreQ2;
         this.starScoreQ3 = starScoreQ3;
         this.finalNote = finalNote;
-        this.avageScore = avageScore;
+        this.grade = grade;
     }
 
     public float getStarScoreQ1() {
@@ -48,11 +48,11 @@ public class courseReviewModel {
         this.finalNote = finalNote;
     }
 
-    public float getAvageScore() {
-        return avageScore;
+    public String getGrade() {
+        return grade;
     }
 
-    public void setAvageScore(float avageScore) {
-        this.avageScore = avageScore;
+    public void setAvageScore(String grade) {
+        this.grade = grade;
     }
 }

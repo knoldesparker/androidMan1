@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity  {
     private static String TAG ="MainActivity";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference courseListRef = db.collection("courses");
+
     private CourseAdapter adapter;
 
 
