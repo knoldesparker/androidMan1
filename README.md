@@ -25,4 +25,7 @@ Currently it holds and structured like
 			* question 3
 			* question N
 
+## Recycler View
+In order to display the data from firestore, the app uses the android recycler view
+
 
