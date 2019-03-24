@@ -8,10 +8,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RatingBar.OnRatingBarChangeListener;
+
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,6 +32,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class CourseRatingActivity extends AppCompatActivity {
     private TextView textViewQ1;
@@ -42,6 +47,10 @@ public class CourseRatingActivity extends AppCompatActivity {
     private String pathForCourse;
     private String nameForCourse;
     private String grade;
+    private Button emButton;
+    boolean rb1Flag = false;
+    boolean rb2Flag = false;
+
     DecimalFormat df = new DecimalFormat("#.##");
 
     private static final String TAG = "CourseRatingActivity";
@@ -64,9 +73,44 @@ public class CourseRatingActivity extends AppCompatActivity {
         ratingBarQ2 = findViewById(R.id.ratingQ2);
         ratingBarQ3 = findViewById(R.id.ratingQ3);
         editTextfinalNote = findViewById(R.id.etfinalNote);
+        emButton = findViewById(R.id.email_button);
         getIncomingIntent();
         setValuesOnScreen();
         setupFirebaseAuth();
+        emButton.setOnClickListener(onClickListenerMail);
+        addListenerOnRatingBar();
+    }
+
+    private void addListenerOnRatingBar() {
+        ratingBarQ1.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Log.d(TAG, "onRatingChanged: swapping value on r1 " + rating);
+
+                if (rating > 0.0){
+                    Log.d(TAG, "onRatingChanged: Flag for rb1 is true ");
+                    rb1Flag = true;
+                } else {
+                    Log.d(TAG, "onRatingChanged: Flag for rb1 is false");
+                    rb1Flag = false;
+                }
+            }
+        });
+        ratingBarQ2.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Log.d(TAG, "onRatingChanged: swapping value on r2 " + rating);
+
+                if (rating > 0.0){
+                    Log.d(TAG, "onRatingChanged: Flag for rb2 is true ");
+                    rb2Flag = true;
+                } else {
+                    Log.d(TAG, "onRatingChanged: Flag for rb2 is false");
+                    rb2Flag = false;
+                }
+
+            }
+        });
     }
 
     @Override
@@ -175,48 +219,131 @@ public class CourseRatingActivity extends AppCompatActivity {
         }
         else if (avageIntScore < 4.4 && avageIntScore > 4){
             grade = "A";
-            Log.d(TAG, "courseRating: avageIntScore < 4.4 && avageIntScore > 4 " + grade);
+            Log.d(TAG, "courseRating: avageIntScore <= 4.4 && avageIntScore > 4 " + grade);
 
         }
-        else if (avageIntScore < 4 && avageIntScore > 3.5){
+        else if (avageIntScore <= 4 && avageIntScore > 3.5){
             grade = "B";
-            Log.d(TAG, "courseRating: avageIntScore < 4 && avageIntScore > 3.5 " + grade);
+            Log.d(TAG, "courseRating: avageIntScore <= 4 && avageIntScore > 3.5 " + grade);
         }
-        else if (avageIntScore < 3.5 && avageIntScore > 2){
+        else if (avageIntScore <= 3.5 && avageIntScore > 2){
             grade = "C";
-
+        } 
+        else if (avageIntScore <= 2 && avageIntScore > 1.5) {
+            grade = "D";
+            Log.d(TAG, "courseRating: avageIntScore <= 2 && avageIntScore > 1.5");
+        }
+        else if (avageIntScore <= 1.5 && avageIntScore > 1){
+            grade = "E";
+            Log.d(TAG, "courseRating: avageIntScore <= 1.5 && avageIntScore > 1");
+        }
+        else if (avageIntScore <= 1 && avageIntScore >= 0.0){
+            grade = "F";
+            Log.d(TAG, "courseRating: avageIntScore <= 1 && avageIntScore >= 0.0");
         }
     }
 
 
 
-    private void saveRating(){
-        courseRating();
+    private void saveRating() {
+
+        //if (rb1Flag & rb2Flag) {
 
 
-        String a1String = editTextfinalNote.getText().toString();
-        float ratingBarQ1Rating = ratingBarQ1.getRating();
-        float ratingBarQ2Rating = ratingBarQ2.getRating();
-        float ratingBarQ3Rating = ratingBarQ3.getRating();
+            courseRating();
+            String a1String = editTextfinalNote.getText().toString();
+            float ratingBarQ1Rating = ratingBarQ1.getRating();
+            float ratingBarQ2Rating = ratingBarQ2.getRating();
+            float ratingBarQ3Rating = ratingBarQ3.getRating();
 
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+            if (a1String.trim().isEmpty()) {
+                Toast.makeText(this, "Please write a message", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
 
+            Log.d(TAG, "saveRating: avageScore: " + grade);
+            DocumentReference courseRef = FirebaseFirestore.getInstance()
+                    .collection(pathForCourse + "/courseReview").document(userId);
+            courseRef.set(new courseReviewModel(ratingBarQ1Rating, ratingBarQ2Rating, ratingBarQ3Rating, a1String, grade));
+            Toast.makeText(this, "Review added", Toast.LENGTH_SHORT).show();
 
-        if (a1String.trim().isEmpty()){
-            Toast.makeText(this, "Please write a message", Toast.LENGTH_SHORT).show();
-            return;
+            finish();
         }
+       // else {
+         //   Toast.makeText(this, "Please give a rating", Toast.LENGTH_SHORT).show();
+
+        //}
+    //}
 
 
-        Log.d(TAG, "saveRating: avageScore: " + grade);
-        DocumentReference courseRef = FirebaseFirestore.getInstance()
-                .collection(pathForCourse+ "/courseReview").document(userId);
-            courseRef.set(new courseReviewModel(ratingBarQ1Rating,ratingBarQ2Rating,ratingBarQ3Rating,a1String, grade));
-        Toast.makeText(this, "Review added", Toast.LENGTH_SHORT).show();
 
-        finish();
-    }
+
+
+    private View.OnClickListener onClickListenerMail = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            courseRating();
+            String a1String = editTextfinalNote.getText().toString();
+            float ratingBarQ1Rating = ratingBarQ1.getRating();
+            float ratingBarQ2Rating = ratingBarQ2.getRating();
+            float ratingBarQ3Rating = ratingBarQ3.getRating();
+
+
+            if (a1String.trim().isEmpty()) {
+                Log.d(TAG, "onClick: empty sting");
+                Toast.makeText(getApplicationContext(), "please insert a message", Toast.LENGTH_SHORT).show();
+
+
+            } else {
+                //Gets the id for the logged in user
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                //Sets the text for the mail
+                String textMessage = "Hello there my fellow app \n" +
+                textViewQ1.getText() + " : " + Float.toString(ratingBarQ1Rating) + "\n" +
+                textViewQ2.getText() + " : " + Float.toString(ratingBarQ2Rating) + "\n" +
+                textViewQ3.getText() + " : " + Float.toString(ratingBarQ3Rating) + "\n" +
+                "Final Note :" + a1String;
+
+                //Sets the subject field for the mail
+                String mailSubject = "Course Rating for " + nameForCourse + " by student " + userId;
+                //sets the reciviant mail for the mail. Has to be a array of emails.
+                String mailAdress[] = {"courserating@kea.dk"};
+
+                //Creates an intent
+                Intent sendIntent = new Intent();
+                //Setes the Action to a SEND. ACTION_SEND represent an action where you send data to another app
+                sendIntent.setAction(Intent.ACTION_SEND);
+                //Sets the fields of the mail with reciver,subject and text
+                sendIntent.putExtra(Intent.EXTRA_EMAIL, mailAdress);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, textMessage);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, mailSubject);
+                //Sets the type of the intent to text
+                sendIntent.setType("text/plain");
+
+
+                // Always use string resources for UI text.
+                // This says something like "Share this photo with"
+                String title = getResources().getString(R.string.fui_continue);
+                // Create intent to show the chooser dialog
+                Intent chooser = Intent.createChooser(sendIntent, title);
+
+                // Verify the original intent will resolve to at least one activity
+                if (sendIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(chooser);
+                }
+            }
+        }
+    };
+
+
+
+
+
 
 
     private void setupFirebaseAuth(){
@@ -227,9 +354,7 @@ public class CourseRatingActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-
                 }
             }
         };
