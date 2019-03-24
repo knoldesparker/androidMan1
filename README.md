@@ -35,9 +35,13 @@ To use the recycler view you have to use models, adapters, holders and inflaters
 
 ## Rating a course
 This is the biggest part of the app, with alot of functionality.
+A user can pick a 0 - 5 star rating for eatch question and a final note at the end.
+In order to submit the rating to the Firestore, the user press the "Save" icon up in the right cornor of the screen.
+
+When a user saves a avage score is generatet and a grade is given beween A+ to F.
 
 ## Mail a rating
-As part of the requirement the app had to send a mail to the school about the rating. If fields are valid the user has to have a Gmail app or another app able to send a mail. When the user click on the "Mail" button a app choser pops up, and a user can pick the app they want to use. The mail is automaticly filled out with sender,reciver,subject and the rating for the course.
+As part of the requirement the app had to send a mail to the school about the rating. If fields are valid the user has to have a Gmail app or another app able to send a mail. When the user click on the "Mail" button a app choser pops up, and a user can pick the app they want to use. The mail is automaticly filled out with sender, reciver, subject and the rating for the course.
 ### If fields are empty a toast pop up asking the user for input.
 
 
