@@ -4,7 +4,8 @@ This app allows users to rate courses available at KEA.
 
 ## Firebase integration
 This app uses Google Firebase/Firestore for files and users.
-Currently it holds and structured like:
+Currently it holds and structured like
+
 	* courses
 		* Fields
 			* courseName
@@ -18,5 +19,10 @@ Currently it holds and structured like:
 				* course grade
 				* final note
 	* Course Questions
+		*Fields
+			* question 1
+			* question 2
+			* question 3
+			* question N
 
 
