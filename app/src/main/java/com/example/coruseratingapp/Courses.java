@@ -1,5 +1,11 @@
 package com.example.coruseratingapp;
 
+/*
+    * This is the model class for the Courses
+    * It's used to send and receive data from Firestore
+    * MVC and POJO stuff
+ */
+
 public class Courses {
     public String courseName, courseDesc;
 

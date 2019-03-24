@@ -2,6 +2,11 @@
     <string name="app_name">CoruseRatingApp</string>
     <string name="courseName">None</string>
     <string name="final_comments_on_course">Final comments on course</string>
-    <string name="finalComments">write a few lines what you think of the course</string>
+    <string name="finalComments">Final notes about the course</string>
     <string name="sign_out">Sign out</string>
+    <string name="signInError">Fill in all the fields</string>
+    <string name="signInAuthError">Authentication Failed</string>
+    <string name="serviceError">Can\'t connect to services</string>
+    <string name="toastSelectPosition">Position</string>
+    <string name="toastSelectID">ID:</string>
 </resources>

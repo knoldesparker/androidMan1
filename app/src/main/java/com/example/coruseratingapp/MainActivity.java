@@ -1,6 +1,5 @@
 package com.example.coruseratingapp;
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -10,15 +9,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,7 +21,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -36,19 +29,15 @@ public class MainActivity extends AppCompatActivity  {
     //Firebase
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    //Tag for debugging
     private static String TAG ="MainActivity";
+    //Get instance of firestore
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    //creates a referance to the collection in Firestore
     private CollectionReference courseListRef = db.collection("courses");
 
+    // Instansiates the CourseAdapter as adapter
     private CourseAdapter adapter;
-
-
-   // RecyclerView recyclerView;
-    //RecyclerView.Adapter mAdapter;
-    //RecyclerView.LayoutManager layoutManager;
-    //private FirebaseRecyclerAdapter<Courses, CourseListHolder> firebaseRecyclerAdapter;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +47,7 @@ public class MainActivity extends AppCompatActivity  {
         setupFirebaseAuth();
     }
 
+    //sends a query to the Firestore based of the courseListRef, and order it by courseName
     private void setUpRecyclerView() {
         Query query = courseListRef.orderBy("courseName", Query.Direction.ASCENDING);
         final FirestoreRecyclerOptions<Courses> options = new FirestoreRecyclerOptions.Builder<Courses>()
@@ -66,46 +56,39 @@ public class MainActivity extends AppCompatActivity  {
 
         adapter = new CourseAdapter(options);
 
+        //binding to the recycler view
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-
+        //Sets click listener on the recyclerView.
+        //gets the information on each element on the list
+        //fills out the information to the intent and sends it to the CourseRatingActivity.
         adapter.setOnItemClickListener(new CourseAdapter.onItemClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
 
-                Courses course = documentSnapshot.toObject(Courses.class);
 
                 String id = documentSnapshot.getId();
                 String path = documentSnapshot.getReference().getPath();
                 String blob = adapter.getItem(position).courseName;
 
 
-                Toast.makeText(MainActivity.this,"Position" + position + " ID: " + id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,getString(R.string.toastSelectPosition) + position + getString(R.string.toastSelectID) + id, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(MainActivity.this, CourseRatingActivity.class);
 
-                String listString = String.join(id);
-                // String message = listString;
                 intent.putExtra("courseID", id);
                 intent.putExtra("coursePath", path);
                 intent.putExtra("courseName", blob);
                 startActivity(intent);
-
-
-
-                //startActivity(new Intent(MainActivity.this,CourseRatingActivity.class));
-                //courseListRef.document(documentSnapshot.getId())
-                   //     .collection("courseReview").add(course);
-
-
             }
         });
     }
 
+    //Creates the menu up top to logout
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.options_menu, menu);
@@ -113,6 +96,7 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
+    //setup a case for clicking the sign out field and calls the sign out method
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -125,11 +109,15 @@ public class MainActivity extends AppCompatActivity  {
         }
     }
 
+    //signOut method
+    //Uses the firebase Auth signOut function
     private void signOut(){
         Log.d(TAG, "signOut: signing out");
         FirebaseAuth.getInstance().signOut();
     }
 
+    //Checks the state of the user that is sign in.
+    //ether the user is active or is signing out
     private void setupFirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: started.");
 
@@ -152,7 +140,7 @@ public class MainActivity extends AppCompatActivity  {
         };
     }
 
-
+    //Runs when activity loads, and actions happens
     @Override
     protected void onStart() {
         super.onStart();
@@ -162,6 +150,7 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
+    //runs when activity stops.
     @Override
     protected void onStop() {
         super.onStop();

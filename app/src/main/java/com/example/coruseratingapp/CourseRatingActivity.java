@@ -17,9 +17,6 @@ import android.widget.Toast;
 import android.widget.RatingBar.OnRatingBarChangeListener;
 
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -32,7 +29,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class CourseRatingActivity extends AppCompatActivity {
     private TextView textViewQ1;
@@ -41,8 +37,6 @@ public class CourseRatingActivity extends AppCompatActivity {
     private TextView Title;
     private EditText editTextfinalNote;
     private RatingBar ratingBarQ1, ratingBarQ2, ratingBarQ3;
-    DocumentSnapshot documentSnapshot;
-    private String test;
     private String idForCourse;
     private String pathForCourse;
     private String nameForCourse;
@@ -81,6 +75,8 @@ public class CourseRatingActivity extends AppCompatActivity {
         addListenerOnRatingBar();
     }
 
+    //Method to monitor the ratings of the rating bar.
+    //can be used to validate the inputs.
     private void addListenerOnRatingBar() {
         ratingBarQ1.setOnRatingBarChangeListener(new OnRatingBarChangeListener() {
             @Override
@@ -112,7 +108,8 @@ public class CourseRatingActivity extends AppCompatActivity {
             }
         });
     }
-
+    //On stats gets called when activity starts to load.
+    //makes a Firestore referace to the course questions.
     @Override
     protected void onStart() {
         super.onStart();
@@ -130,6 +127,7 @@ public class CourseRatingActivity extends AppCompatActivity {
                 String quest3 = "";
                 String documentId = "";
 
+                //For loop that adds eatch question from the documents to the questions on the activity
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                     courseQuestionModel courseQ = documentSnapshot.toObject(courseQuestionModel.class);
                     courseQ.setDocumentID(documentSnapshot.getId());
@@ -152,7 +150,7 @@ public class CourseRatingActivity extends AppCompatActivity {
         });
     }
 
-
+    //Graps the intent send from the MainActivity and binds the document collections
     private void getIncomingIntent(){
 
         Log.d(TAG, "getIncomingIntent: checking for incoming intents.");
@@ -172,15 +170,16 @@ public class CourseRatingActivity extends AppCompatActivity {
         }
     }
 
+    //sets the title on the activity
     private void setValuesOnScreen(){
         Log.d(TAG, "setValuesOnScreen: setting values on screen");
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference courseQuestionsRef = db.collection("courseQuestions");
-
+       // FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //CollectionReference courseQuestionsRef = db.collection("courseQuestions");
         Title.setText(nameForCourse);
     }
 
-
+    //Creates the top menu, acorting to the XML file
+    //inflates the menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -188,6 +187,8 @@ public class CourseRatingActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    //cases for the actions presed in the menu
+    //runs the method saveRating when saveRating is pressed.
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -199,7 +200,7 @@ public class CourseRatingActivity extends AppCompatActivity {
 
         }
     }
-
+    //Method for calculation the course rating and giving the course a grade base on rating
     private void courseRating(){
 
         float ratingBarQ1Rating = ratingBarQ1.getRating();
@@ -244,7 +245,15 @@ public class CourseRatingActivity extends AppCompatActivity {
     }
 
 
-
+    /*
+        * Method for saving the rating to Firebase
+        * runs the courseRating method
+        * gets the values from rating
+        * gets the userID from the user
+        * Checks if the textField is empty
+        * sets a document in the Firestore collection based on userID and pathForCourse.
+        * sets allows you to either create a new document or if it excise, overwrite it.
+     */
     private void saveRating() {
 
         //if (rb1Flag & rb2Flag) {
@@ -272,16 +281,21 @@ public class CourseRatingActivity extends AppCompatActivity {
 
             finish();
         }
-       // else {
-         //   Toast.makeText(this, "Please give a rating", Toast.LENGTH_SHORT).show();
 
-        //}
-    //}
-
-
-
-
-
+        /*
+            * Method for sending a mail
+            * onClick on the mailButton
+            * gets the grade fro courseRating
+            * gets the values from rating bars
+            * gets the text from finalNote
+            * checks if the finalNote is empty, if not no mail is sent, toast promt for input
+            * Creates string userId userID is the current user
+            * creates string message is the text for the email
+            * creates string mail subject, is the subject for the mail
+            * creates array of string(s) mail reciver, the reciver of the mail. Has to be array
+            * Creates an send Intent, sends is when you want to send stuff
+            * fills out the intent with EXTRA fields.
+         */
     private View.OnClickListener onClickListenerMail = new View.OnClickListener() {
 
         @Override
@@ -325,9 +339,9 @@ public class CourseRatingActivity extends AppCompatActivity {
                 //Sets the type of the intent to text
                 sendIntent.setType("text/plain");
 
-
+                //Allows the user to pick what app they want to use, if they dont have gmail or want to use another email app
                 // Always use string resources for UI text.
-                // This says something like "Share this photo with"
+                // This says something like "Continue"
                 String title = getResources().getString(R.string.fui_continue);
                 // Create intent to show the chooser dialog
                 Intent chooser = Intent.createChooser(sendIntent, title);
@@ -345,7 +359,7 @@ public class CourseRatingActivity extends AppCompatActivity {
 
 
 
-
+    //Firebase Auth user auth
     private void setupFirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: started.");
 

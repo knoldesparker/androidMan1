@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,12 +24,15 @@ public class CourseAdapter extends FirestoreRecyclerAdapter<Courses, CourseAdapt
         super(options);
     }
 
+    //Sets the fields in the recycler view based on the Courses (model)
     @Override
     protected void onBindViewHolder(@NonNull CourseHolder holder, int position, @NonNull Courses model) {
         holder.textViewTitle.setText(model.getCourseName());
         holder.textViewDescription.setText(model.getCourseDesc());
     }
 
+
+    //Inflates the layout based on the xml file, item_list, and reruns a CourseHOlder, to hold the data.
     @NonNull
     @Override
     public CourseHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -41,12 +45,13 @@ public class CourseAdapter extends FirestoreRecyclerAdapter<Courses, CourseAdapt
         TextView textViewDescription;
 
 
-
+        // binds the Java and XML tag together.
         public CourseHolder(@NonNull View itemView) {
             super(itemView);
             textViewTitle = itemView.findViewById(R.id.text_view_title);
             textViewDescription = itemView.findViewById(R.id.text_view_description);
 
+            //onClick on eacth item in the list.
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -61,6 +66,7 @@ public class CourseAdapter extends FirestoreRecyclerAdapter<Courses, CourseAdapt
 
         }
     }
+     //onClick listener that gets the document repesentet in the view and x position.
     public interface onItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }

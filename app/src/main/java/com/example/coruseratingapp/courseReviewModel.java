@@ -1,5 +1,10 @@
 package com.example.coruseratingapp;
 
+/*
+    * This is the model for courseReview
+    * It's used to send and receive data from Firestore
+    * MVC and POJO stuff
+ */
 public class courseReviewModel {
     float starScoreQ1, starScoreQ2, starScoreQ3;
     String finalNote;

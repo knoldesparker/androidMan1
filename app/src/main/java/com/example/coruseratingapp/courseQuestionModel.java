@@ -1,5 +1,12 @@
 package com.example.coruseratingapp;
 
+/*
+    *   This is the model class for the course Questions on the course rating activity.
+    *   This way we can alter the questions on the fly.
+    *   But if we need to add more questions we need to alter the model file also.
+    *
+ */
+
 public class courseQuestionModel {
     String question1, question2, question3;
     String documentID;
