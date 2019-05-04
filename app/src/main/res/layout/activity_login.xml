@@ -16,7 +16,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="TODO" />
+        android:src="@mipmap/ic_launcher"
+         />
 
     <EditText
         android:id="@+id/email"

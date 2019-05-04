@@ -321,7 +321,7 @@ public class CourseRatingActivity extends AppCompatActivity {
                 textViewQ1.getText() + " : " + Float.toString(ratingBarQ1Rating) + "\n" +
                 textViewQ2.getText() + " : " + Float.toString(ratingBarQ2Rating) + "\n" +
                 textViewQ3.getText() + " : " + Float.toString(ratingBarQ3Rating) + "\n" +
-                "Final Note :" + a1String;
+                "Final Note : " + a1String;
 
                 //Sets the subject field for the mail
                 String mailSubject = "Course Rating for " + nameForCourse + " by student " + userId;

@@ -56,11 +56,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mEmail = findViewById(R.id.email);                  //assigns mEmial to the field email
         mPassword = findViewById(R.id.password);            //assign mPassword to the field password
         mSignIn = findViewById(R.id.button_sign_in);        //assign mSignIn to the button button_sign_in
-
+        mSignIn.setOnClickListener(this);
         setupFirebaseAuth();                                //Runs the setupFirebaseAuth method
+        /*
         if(servicesOK()){
             mSignIn.setOnClickListener(this);
         }
+        */
     }
 
 
